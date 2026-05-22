@@ -69,8 +69,11 @@ $(obj)/Image.lz4-dtb: $(obj)/Image.lz4 $(DTB_OBJS) FORCE
 
 ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
 ifeq ($(CONFIG_BOARD_B1C1),y)
+quiet_cmd_local_mkdtimg = MKDTIMG $@
+local_mkdtimg = ./mkdtimg -c -d $(DTBO_OBJS) -s $(2) -o $@
+
 $(obj)/dtbo.img: $(obj)/dts/dtboimg.cfg $(DTBO_OBJS) FORCE
-	$(call if_changed,mkdtimg,4096) # align dtbo.img to 4kB
+        $(call if_changed,local_mkdtimg,4096) # align dtbo.img to 4kB
 else
 $(obj)/dtbo.img: $(obj)/dts/dtboimg-sdm670.cfg $(DTBO_OBJS) FORCE
 	$(call if_changed,mkdtimg,4096) # align dtbo.img to 4kB
